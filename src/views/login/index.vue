@@ -17,9 +17,9 @@
               <el-form-item class='checked' prop="checked">
                   <el-checkbox v-model="loginForm.checked"></el-checkbox>
                   <span>我已阅读并同意用户协议和隐私条款</span>
-              </el-form-item>
+              </el-form-item>n
               <el-form-item class="log" >
-                  <el-button type="primary" style="width:400px">登录</el-button>
+                  <el-button type="primary" style="width:400px" @click='onLogin'>登录</el-button>
               </el-form-item>
           </el-form>
       </el-card>
@@ -55,6 +55,14 @@ export default {
         ]
       }
 
+    }
+  },
+  methods: {
+    onLogin () {
+      // 获取表单的输入的内容
+      this.$refs.loginForm.validate(isOK => {
+        // 如果成功调用接口
+      })
     }
   }
 
