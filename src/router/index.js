@@ -1,14 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../views/home'
+import Login from '../views/login'
 
 Vue.use(VueRouter)
+// 因为登录页在一开始的时候就要加载页面，不需要按需加载，直接放在路由中
 
-const routes = [{
-  path: '/',
-  name: 'home',
-  component: Home
-}
+const routes = [
+  {
+    path: '/',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+
+  {
+    path: '/home',
+    name: 'home',
+    component: Home
+  }
   // {
   //   path: '/about',
   //   name: 'about',
