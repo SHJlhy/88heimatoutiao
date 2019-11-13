@@ -17,7 +17,7 @@
               <el-form-item class='checked' prop="checked">
                   <el-checkbox v-model="loginForm.checked"></el-checkbox>
                   <span>我已阅读并同意用户协议和隐私条款</span>
-              </el-form-item>n
+              </el-form-item>
               <el-form-item class="log" >
                   <el-button type="primary" style="width:400px" @click='onLogin'>登录</el-button>
               </el-form-item>
@@ -51,17 +51,35 @@ export default {
             callback(new Error('请同意'))
           }
         } }
-
         ]
       }
-
     }
   },
   methods: {
     onLogin () {
       // 获取表单的输入的内容
-      this.$refs.loginForm.validate(isOK => {
-        // 如果成功调用接口
+      this.$refs.loginForm.validate(isOk => {
+        if (isOk) {
+          // 调用接口
+          this.$axios({
+            method: 'POST',
+            url: '/authorizations',
+            data: this.loginForm
+          }).then(res => {
+            console.log(res)
+            // 登录成功
+            // 存储token
+            localStorage.setItem('token', res.data.data.token)
+            // 跳转到主页
+            this.$router.push('/home')
+          }).catch(res => {
+            // eslint-disable-next-line no-unused-expressions
+            this.$message({
+              type: 'warning',
+              message: '手机号或验证码错误'
+            })
+          })
+        }
       })
     }
   }
@@ -102,7 +120,6 @@ export default {
     }
     .log {
         text-align: center;
-        // margin-top: -20px;
 
     }
 

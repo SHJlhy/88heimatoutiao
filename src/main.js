@@ -8,7 +8,7 @@ import axios from 'axios'
 // 统一设置axios使用
 Vue.prototype.$axios = axios
 // 统一设置基地址
-axios.defaults.baseURL = ' http://ttapi.research.itcast.cn/mp/'
+axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
 
 Vue.use(ElementUI)
 
