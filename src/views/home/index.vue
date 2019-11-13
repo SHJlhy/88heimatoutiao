@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class='login'>
    主页
   </div>
 </template>
@@ -13,3 +13,9 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.login{
+  color:blue;
+}
+
+</style>
