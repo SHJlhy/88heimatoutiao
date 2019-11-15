@@ -71,7 +71,7 @@ export default {
             // 存储token
             localStorage.setItem('token', res.data.data.token)
             // 跳转到主页
-            this.$router.push('/home')
+            this.$router.push('/')
           }).catch(res => {
             // eslint-disable-next-line no-unused-expressions
             this.$message({
