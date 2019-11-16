@@ -6,6 +6,7 @@ import Home from '@/views/home'
 import Publish from '@/views/publish'
 import Article from '@/views/article'
 import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 Vue.use(VueRouter)
 // 因为登录页在一开始的时候就要加载页面，不需要按需加载，直接放在路由中
 

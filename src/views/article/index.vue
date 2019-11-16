@@ -39,15 +39,16 @@
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
-          <span>共找到59806条符合条件的内容</span>
+          <span>共找到{{total_count}}条符合条件的内容</span>
         </div>
         <div>
-          <!-- el-table表格组件 data表格中的数据 要求是数组
+          <!-- el-table表格组件 data组件表格中的数据 要求是数组
           默认只能渲染普通文本，图片等非普通文本不可以的识别的需要自定表格数列
           状态我们需要的不是值 而是值对应的状态文本 -->
           <!-- prop 对应的是数组中的字段 -->
 
            <el-table
+              v-loading="loading"
               :data="articles"
               style="width: 100%">
               <el-table-column
@@ -85,12 +86,25 @@
               <el-table-column
                 prop="address"
                 label="操作">
+                <template>
+                    <el-button  icon="el-icon-edit">编辑</el-button>
+                    <el-button  icon="el-icon-delete">删除</el-button>
+                </template>
+
               </el-table-column>
             </el-table>
         </div>
       </el-card>
-  </div>
-</template>
+      <!-- 在加载期间不允许点击按钮 -->
+      <el-pagination
+        @current-change='onPageChange'
+        background
+        :disabled="loading"
+        layout="prev, pager, next"
+        :total="total_count">
+      </el-pagination>
+        </div>
+      </template>
 
 <script>
 export default {
@@ -101,8 +115,9 @@ export default {
         channel_id: '',
         begin_pubdate: '',
         end_pubdate: ''
-
       },
+      total_count: 0,
+      loading: true,
       // 表格组件要求数据是数组
       articles: [],
       articleStatus: [
@@ -150,12 +165,18 @@ export default {
     }
   },
   created () {
-    this.loadArticles()
+    // // 在开始加载的时候 loading效果开始 值为true
+    // this.loading = true
+    // 初始化的时候默认显示第一页，所以我们可以传入页码这个参数
+    this.loadArticles(1)
   },
   methods: {
     // 除了登录页面之外，发送请求时都要携带token token放在哪里  放在请求头中
+  // 初始化的时候 默认显示第一页 可以写page=1,也可以不传
 
-    loadArticles () {
+    loadArticles (page = 1) {
+      // // 在开始加载的时候 loading效果开始 值为true
+      this.loading = true
       // eslint-disable-next-line no-unused-vars
       const token = localStorage.getItem('token')
       this.$axios({
@@ -164,14 +185,30 @@ export default {
         headers: {
           // token是变量 模板字符串 Bearer 后面有一个空格 不可多也不可少
           Authorization: `Bearer ${token}`
+        },
+        params: {
+          page
         }
       }).then(res => {
         console.log(res)
         // 获取成功 把结果赋值给Vue实例 初始化data  渲染到页面
         this.articles = res.data.data.results
-      }).catch(res => {
+        this.total_count = res.data.data.total_count
+      // eslint-disable-next-line handle-callback-err
+      }).catch(err => {
         alert('获取失败')
+      }).finally(() => {
+        // 无论成功还是失败最终都会执行
+        this.loading = false
       })
+    },
+    onPageChange (page) {
+      // 在分页组件中有个事件current-change
+      // 可以获取当前的页数 我们设置参数接收，有点类似于事件对象
+      // page设置的参数 是文档要求的需要设置参数接收当前点击的页码
+      // 点击页码，获取当前页的数据，渲染数据,
+      this.loadArticles(page)
+      // console.log(page)
     }
   }
 
